@@ -1,34 +1,47 @@
-# import webdriver
+# imports
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-import time
+from selenium.webdriver.common.keys import Keys 
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
-# create webdriver object
-driver = webdriver.Chrome()
+#opens chrome window
+browser = webdriver.Chrome()
 
-term_dict = ["1.com", "1.net", "1.org", "2.com", "2.net", "2.org", "3.com", "3.net", "3.org", "4.com", "4.net", "4.org", "5.com", "5.net", "5.org", "6.com", "6.net", "6.org", "7.com", "7.net", "7.org", "8.com", "8.net", "8.org", "9.com", "9.net", "9.org", "10.com", "10.net", "10.org"]
+"""Put the website(s) you wish to crawl in the term dictionary"""
+term_dict = []
 results = {}
 
 for i in term_dict:
     term = i
 
     #opens the ICANN lookup
-    driver.get("https://lookup.icann.org/en")
+    browser.get("https://lookup.icann.org/en")
  
     #finds the text box by it's ID
-    element = driver.find_element(By.ID,"input-domain")
+    element = browser.find_element(By.ID,"input-domain")
 
-    #inputs "g.org" into the text box
+    #inputs your domain into the text box
     element.send_keys(term, Keys.ENTER)
 
-    time.sleep(3)
+    timeout = 100 #waits 100 seconds before timeout
+
+    #try except block for checking if page has loaded
+    try:
+        myElem = WebDriverWait(browser, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, "information-panel--heading")))
+    except TimeoutException:
+        print("Loading took too much time!")
+
+    #try except block for checking if page is taken or available 
     try:
         element = driver.find_element(By.CLASS_NAME, "information-panel--heading")
         results[term] = "Taken"
     except:
         results[term] = "Available"
 
+#printing results to the console
 for i in results:
     print(i, results[i])
+
