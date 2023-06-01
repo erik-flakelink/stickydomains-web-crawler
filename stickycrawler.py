@@ -4,15 +4,17 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys 
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 
 #opens chrome window
-browser = webdriver.Chrome()
+options = webdriver.ChromeOptions()
+#options.add_argument("headless")
+options.add_argument("--log-level=3")
+browser = webdriver.Chrome(chrome_options=options)
 
-"""Put the website(s) you wish to crawl in the term dictionary"""
-term_dict = []
+term_dict = ["wawreusaeryaye1.org","2.com","1.com"]
 results = {}
+
 
 for i in term_dict:
     term = i
@@ -26,22 +28,22 @@ for i in term_dict:
     #inputs your domain into the text box
     element.send_keys(term, Keys.ENTER)
 
-    timeout = 100 #waits 100 seconds before timeout
+
+    timeout = 10 #waits 10 seconds before timeout
 
     #try except block for checking if page has loaded
     try:
-        myElem = WebDriverWait(browser, timeout).until(EC.presence_of_element_located((By.CLASS_NAME, "information-panel--heading")))
+        WebDriverWait(browser,timeout).until(lambda browser : browser.find_elements(By.XPATH,"//*[contains(text(), 'The requested domain was not found')]") or browser.find_elements(By.CLASS_NAME,"information-panel--heading"))
     except TimeoutException:
         print("Loading took too much time!")
 
-    #try except block for checking if page is taken or available 
+    #try except block for detecting if a website has been taken
     try:
-        element = driver.find_element(By.CLASS_NAME, "information-panel--heading")
+        element = browser.find_element(By.CLASS_NAME, "information-panel--heading")
         results[term] = "Taken"
     except:
         results[term] = "Available"
 
-#printing results to the console
 for i in results:
     print(i, results[i])
 
