@@ -8,10 +8,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 #opens chrome window
 options = webdriver.ChromeOptions()
-#options.add_argument("headless")
+options.add_argument("headless")
 options.add_argument("--log-level=3")
 browser = webdriver.Chrome(chrome_options=options)
 
+
+"""Modify the term_dict to lookup your domains!"""
 term_dict = ["wawreusaeryaye1.org","2.com","1.com"]
 results = {}
 
