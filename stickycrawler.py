@@ -8,8 +8,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 #opens chrome window
 options = webdriver.ChromeOptions()
-options.add_argument("headless")
-options.add_argument("--log-level=3")
+options.add_argument("headless") #you can't see the window now
+options.add_argument("--log-level=3") #clearing nonsense logs that clutter the console
 browser = webdriver.Chrome(chrome_options=options)
 
 
