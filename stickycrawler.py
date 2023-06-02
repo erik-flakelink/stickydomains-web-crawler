@@ -57,14 +57,14 @@ class lookup():
             #finds year of creation
             if self.results[term] == "Taken":
                 dateElem = browser.find_element(By.CSS_SELECTOR,".date.registry-created")
-                self.creation_date[term] = dateElem.text
+                self.creation_date[term] = dateElem.text[0:4]
             else:
                 self.creation_date[term] = "Not created yet"
 
     #checks if a domain is parked
     def parked(self):
 
-
+        #finds http status code. A status code of 404 means that the domain is parked
         for i in self.term_dict:
             if self.results[i] == "Taken":
             
@@ -82,7 +82,7 @@ class lookup():
     #prints the information you have crawled 
     def print_all(self):
         for i in self.term_dict:
-            print(f"{i, self.results[i]},{self.parked_list[i]},Created on: {self.creation_date[i]} \n")
+            print(f"{i, self.results[i]},{self.parked_list[i]},Creation date: {self.creation_date[i]} \n")
 
 #play around down here to find the information you need
 
