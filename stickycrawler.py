@@ -8,6 +8,7 @@ import requests
 
 
 
+
 #configuring the chrome window
 options = webdriver.ChromeOptions()
 options.add_argument("headless") #makes it so that you don't see the browser pop up
@@ -19,10 +20,10 @@ browser = webdriver.Chrome(chrome_options=options)
 #contains all of the functions necessary to make the lookup work
 class lookup():
     def __init__(self,term_dict):
-        self.term_dict = term_dict
-        self.results = {}
-        self.creation_date = {}
-        self.parked_list = {}
+        self.term_dict = term_dict #list of domains to crawl
+        self.results = {} #availability of domain
+        self.creation_date = {} #The year the domain was first created
+        self.parked_list = {} #checks if domain is parked
 
     #use ICANN to lookup availability and year of creation
     def ICANN_lookup(self):
@@ -80,9 +81,11 @@ class lookup():
                 self.parked_list[i] = "Available"
 
     #prints the information you have crawled 
+    """Run this after you have obtained all other information!"""
     def print_all(self):
         for i in self.term_dict:
-            print(f"{i, self.results[i]},{self.parked_list[i]},Created in: {self.creation_date[i]} \n")
+                print(f"{i, self.results[i]},{self.parked_list[i]},Created in: {self.creation_date[i]} \n")
+
 
 #play around down here to find the information you need
 
